@@ -7,8 +7,11 @@ resource "azurerm_mssql_failover_group" "mssql_failover_groups" {
   readonly_endpoint_failover_policy_enabled = each.value.readonly_endpoint_failover_policy_enabled
   tags                                      = each.value.tags
 
-  partner_server {
-    id = each.value.partner_server.id
+  dynamic "partner_server" {
+    for_each = each.value.partner_server
+    content {
+      id = partner_server.value.id
+    }
   }
 
   read_write_endpoint_failover_policy {

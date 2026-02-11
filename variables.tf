@@ -21,13 +21,21 @@ EOT
     databases                                 = optional(set(string))
     readonly_endpoint_failover_policy_enabled = optional(bool)
     tags                                      = optional(map(string))
-    partner_server = object({
+    partner_server = list(object({
       id = string
-    })
+    }))
     read_write_endpoint_failover_policy = object({
       grace_minutes = optional(number)
       mode          = string
     })
   }))
+  validation {
+    condition = alltrue([
+      for k, v in var.mssql_failover_groups : (
+        length(v.partner_server) >= 1
+      )
+    ])
+    error_message = "Each partner_server list must contain at least 1 items"
+  }
 }
 
