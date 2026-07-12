@@ -1,3 +1,7 @@
+output "mssql_failover_groups_id" {
+  description = "Map of id values across all mssql_failover_groups, keyed the same as var.mssql_failover_groups"
+  value       = { for k, v in azurerm_mssql_failover_group.mssql_failover_groups : k => v.id }
+}
 output "mssql_failover_groups_databases" {
   description = "Map of databases values across all mssql_failover_groups, keyed the same as var.mssql_failover_groups"
   value       = { for k, v in azurerm_mssql_failover_group.mssql_failover_groups : k => v.databases }
